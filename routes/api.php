@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,5 +23,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/user', function (Request $request) {
         return $request->user();
+    });
+
+    Route::prefix('/contact')->group(function () {
+        Route::post('/', [ContactController::class, 'create']);
+        Route::get('/', [ContactController::class, 'getAll']);
+        Route::get('/{id}', [ContactController::class, 'getById']);
+        Route::put('/{id}', [ContactController::class, 'update']);
     });
 });
