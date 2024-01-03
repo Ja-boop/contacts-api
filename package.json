@@ -3,6 +3,10 @@
     "type": "module",
     "scripts": {
         "start:dev": "php artisan serve",
+        "refresh": "php artisan migrate:refresh --seed",
+        "seed": "php artisan db:seed",
+        "migration": "php artisan migrate",
+        "migration:reset": "php artisan migrate:reset",
         "dev": "vite",
         "build": "vite build"
     },
