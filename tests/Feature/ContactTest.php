@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
-use function PHPUnit\Framework\assertTrue;
-
 class ContactTest extends TestCase
 {
     public function test_user_creation_and_edition(): void
