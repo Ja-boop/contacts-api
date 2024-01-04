@@ -7,6 +7,7 @@
         "seed": "php artisan db:seed",
         "migration": "php artisan migrate",
         "migration:reset": "php artisan migrate:reset",
+        "test": "php artisan test",
         "dev": "vite",
         "build": "vite build"
     },
