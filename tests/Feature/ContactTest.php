@@ -5,12 +5,17 @@ namespace Tests\Feature;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ContactTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_user_creation_and_edition(): void
     {
+        $this->seed();
+
         Storage::fake('public');
         $file = UploadedFile::fake()->image('avatar.jpg');
 
