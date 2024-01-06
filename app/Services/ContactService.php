@@ -5,17 +5,12 @@ namespace App\Services;
 use App\Http\Requests\CreateContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Models\Contact;
-use App\Repositories\ContactRepository;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 class ContactService
 {
-    public function __construct(private ContactRepository $contactRepository)
-    {
-    }
-
     public function create(CreateContactRequest $request)
     {
         $image_path = $request->file('image')->store('images', 'public');
@@ -26,12 +21,12 @@ class ContactService
             'image_path' => $image_path,
         ]);
 
-        return $this->contactRepository->create($contact);
+        return Contact::create($contact);
     }
 
     public function update(UpdateContactRequest $request, $id)
     {
-        $contact = $this->contactRepository->getBy($id);
+        $contact = Contact::findOrFail($id);
 
         if ($request->hasFile('image')) {
             Storage::delete($contact->image_path);
@@ -46,11 +41,11 @@ class ContactService
 
     public function getBy($id)
     {
-        return $this->contactRepository->getBy($id);
+        return Contact::findOrFail($id);
     }
 
     public function getAllByUser()
     {
-        return $this->contactRepository->getAllByUser(Auth::id());
+        return User::find(Auth::id())->contacts;
     }
 }
