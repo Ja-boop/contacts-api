@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,20 +11,39 @@ class ContactTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_creation_and_edition(): void
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->seed();
-
         Storage::fake('public');
-        $file = UploadedFile::fake()->image('avatar.jpg');
 
-        $loginResponse = $this->post('/api/login', [
+        $this->post('/api/login', [
             'email' => 'test@example.com',
             'password' => 'password',
-        ]);
-        $loginResponse->assertStatus(200);
+        ])->assertStatus(200);
+    }
 
-        $createdContactResponse = $this->post('/api/contact', [
+    public function test_get_all_by_user(): void
+    {
+        $this->get('/api/contact')->assertStatus(200)->assertJsonCount(2);
+    }
+
+    public function test_update(): void
+    {
+        $contactUrl = '/api/contact/1';
+        $this->put($contactUrl, [
+            'name' => 'Jane',
+        ])->assertStatus(200);
+
+        $this->get($contactUrl)->assertJson([
+            'name' => 'Jane',
+        ]);
+    }
+
+    public function test_create(): void
+    {
+        $file = UploadedFile::fake()->image('avatar.jpg');
+        $response = $this->post('/api/contact', [
             'name' => 'John',
             'title' => 'Developer',
             'address' => '123 Main St',
@@ -33,30 +51,10 @@ class ContactTest extends TestCase
             'phone' => '123-456-7890',
             'image' => $file
 
-        ]);
+        ])->assertStatus(201);
 
-        $createdContact = $createdContactResponse->decodeResponseJson()->json();
-        $createdContactResponse->assertStatus(201);
+        $contact = $response->decodeResponseJson()->json();
         Storage::disk('public')->assertExists('images/' . $file->hashName());
-
-        $contactResponse = $this->get('/api/contact/' . $createdContact['id']);
-        $contactResponse->assertStatus(200);
-        $contactResponse->assertJson(
-            fn (AssertableJson $json) =>
-            $json->where('id', $createdContact['id'])->etc()
-        );
-
-        $updateContactResponse = $this->put('/api/contact/' . $createdContact['id'], [
-            'name' => 'Jane',
-        ]);
-        $updateContactResponse->assertStatus(200);
-        print_r($updateContactResponse->decodeResponseJson()->json());
-
-        $updatedContactResponse = $this->get('/api/contact/' . $createdContact['id']);
-        $updatedContactResponse->assertStatus(200);
-        $updatedContactResponse->assertJson(
-            fn (AssertableJson $json) =>
-            $json->where('name', 'Jane')->etc()
-        );
+        $this->get('/api/contact/' . $contact['id'])->assertStatus(200);
     }
 }
