@@ -7,7 +7,7 @@
         "seed": "php artisan db:seed",
         "migration": "php artisan migrate",
         "migration:reset": "php artisan migrate:reset",
-        "test": "php artisan test --coverage --coverage-html=coverage",
+        "test": "php artisan test --coverage --min=80 --coverage-html=coverage",
         "dev": "vite",
         "build": "vite build"
     },
