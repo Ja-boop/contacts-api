@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: ["*"]
 
+env:
+  APP_KEY: ${{ secrets.APP_KEY }}
+
 jobs:
   tests:
     name: Run tests
