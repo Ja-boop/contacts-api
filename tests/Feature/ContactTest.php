@@ -30,10 +30,13 @@ class ContactTest extends TestCase
 
     public function test_update(): void
     {
+        $file = UploadedFile::fake()->image('new-avatar.jpg');
         $contactUrl = '/api/contact/1';
         $this->put($contactUrl, [
             'name' => 'Jane',
+            'image' => $file
         ])->assertStatus(200);
+        Storage::disk('public')->assertExists('images/' . $file->hashName());
 
         $this->get($contactUrl)->assertJson([
             'name' => 'Jane',
