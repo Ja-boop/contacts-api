@@ -21,7 +21,7 @@ class ContactService
             'image_path' => $image_path,
         ]);
 
-        return Contact::create($contact);
+        return Contact::create($contact->toArray());
     }
 
     public function update(UpdateContactRequest $request, $id)
