@@ -1,4 +1,4 @@
-# Contacts-api
+# Contacts API
 
 ## Configuration
 
@@ -11,3 +11,7 @@
 ## How to run it
 
 Start the server with `composer start:dev`
+
+## How to run tests
+
+Run `composer test`
