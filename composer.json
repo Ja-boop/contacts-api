@@ -37,6 +37,12 @@
         }
     },
     "scripts": {
+        "start:dev": "php artisan serve --ansi",
+        "refresh": "php artisan migrate:refresh --seed --ansi",
+        "seed": "php artisan db:seed --ansi",
+        "migration": "php artisan migrate --ansi",
+        "migration:reset": "php artisan migrate:reset --ansi",
+        "test": "php artisan test --ansi --coverage --min=80 --coverage-html=coverage --ansi",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
