@@ -34,7 +34,7 @@ jobs:
       - name: Prepare Laravel Application
         run: |
           cp .env.example .env
-          php artisan key:generate
+          composer post-create-project-cmd
 
       - name: Run tests
-        run: php artisan test --coverage --min=80
+        run: composer test
