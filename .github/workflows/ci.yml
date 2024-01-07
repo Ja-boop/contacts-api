@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: ["*"]
 
-env:
-  APP_KEY: ${{ secrets.APP_KEY }}
-
 jobs:
   tests:
     name: Run tests
@@ -36,7 +33,10 @@ jobs:
 
       - name: Prepare Laravel Application
         run: |
+          cp .env.example .env
           php artisan key:generate
+        env:
+          APP_KEY: ${{ secrets.APP_KEY }}
 
       - name: Run tests
         run: php artisan test
